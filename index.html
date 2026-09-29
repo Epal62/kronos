@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kronos – Assiduité EPAL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --epal:#1c1849; --pros:#37439b; --jeunes:#008acd; --orange:#f18612; --gris:#dfdfdf;
+  --bg:#f4f5fb; --card:#fff; --text:#1c1849; --muted:#6b6f8a; --line:#e6e8f2;
+  --red:#d93a3a; --redbg:#fdeeee; --amber:#c86a00; --amberbg:#fff4e5;
+  --green:#18915a; --greenbg:#e8f7ef; --violet:#7a3fc4; --violetbg:#f4ecfd;
+  --yellow:#a88400; --yellowbg:#fbf6dc; --blue:#008acd; --bluebg:#e5f4fb;
+  --radius:14px; --shadow:0 1px 3px rgba(28,24,73,.06),0 6px 20px rgba(28,24,73,.05);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Montserrat,system-ui,sans-serif}
+h1,h2{font-family:Raleway,Montserrat,sans-serif;margin:0}
+h1{font-size:26px} h2{font-size:17px;display:flex;align-items:center;gap:8px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+/* layout */
+header.top{background:var(--epal);color:#fff;padding:0 24px;display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;font-family:Raleway;font-weight:800;font-size:20px;padding:14px 0}
+.brand .dot{width:28px;height:28px;border-radius:8px;background:var(--orange);display:grid;place-items:center;font-size:15px}
+nav.tabs{display:flex;gap:4px;flex:1;min-width:0;overflow-x:auto}
+nav.tabs button{background:none;border:0;color:#c9cbe6;padding:18px 14px;font-weight:600;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs button.active{color:#fff;border-bottom-color:var(--orange)}
+.syncinfo{font-size:12px;color:#c9cbe6;white-space:nowrap}
+main{max-width:1320px;margin:0 auto;padding:24px}
+.pagehead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.pagehead p{margin:4px 0 0;color:var(--muted)}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+.grid{display:grid;gap:18px}
+.grid>*{min-width:0}
+.g2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(360px,1fr))}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.kpi{border-radius:12px;padding:14px 16px}
+.kpi .l{font-size:12px;font-weight:600;opacity:.85}
+.kpi .v{font-size:26px;font-weight:700;margin-top:4px}
+.kpi .s{font-size:12px;opacity:.75}
+.c-green{background:var(--greenbg);color:var(--green)} .c-red{background:var(--redbg);color:var(--red)}
+.c-amber{background:var(--amberbg);color:var(--amber)} .c-violet{background:var(--violetbg);color:var(--violet)}
+.c-yellow{background:var(--yellowbg);color:var(--yellow)} .c-blue{background:var(--bluebg);color:var(--blue)}
+.c-epal{background:#e9e9f3;color:var(--epal)}
+/* buttons & inputs */
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 14px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:#c7cae0}
+.btn.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+.btn.dark{background:var(--epal);border-color:var(--epal);color:#fff}
+.btn.sm{padding:5px 10px;font-size:12px}
+.btn.danger{color:var(--red)}
+input[type=text],input[type=date],input[type=time],input[type=number],input[type=url],input[type=search],select,textarea{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;width:100%}
+textarea{min-height:80px;font-family:ui-monospace,monospace;font-size:12px}
+label.f{display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--muted)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.filters>div{min-width:150px}
+/* ranking cards */
+.tophead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+.tophead small{color:var(--muted);font-weight:500}
+.rank{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:background .15s}
+.rank:hover{background:#fafaff}
+.rank .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:none;font-size:13px}
+.rank .who{flex:1;min-width:0}
+.rank .who b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank .who span{font-size:12px;color:var(--muted)}
+.rank .val{text-align:right}
+.rank .val b{font-size:20px;display:block;line-height:1.1}
+.rank .val span{font-size:11px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.chip{font-size:11px;font-weight:600;border-radius:6px;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+.empty{color:var(--muted);text-align:center;padding:24px 8px;font-size:13px}
+/* student page */
+.studlist{max-height:330px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:10px}
+.studlist div{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.studlist div:hover{background:#fafaff}
+.studlist div.sel{background:#e9e9f3;font-weight:600}
+.studlist small{color:var(--muted)}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:12px;color:var(--muted);font-weight:600}
+td.num,th.num{text-align:right}
+.badge{font-size:11px;font-weight:700;border-radius:20px;padding:3px 9px;display:inline-block}
+.hours{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.hours div{background:var(--bg);border-radius:10px;padding:10px 12px}
+.hours small{display:block;color:var(--muted);font-size:11px;font-weight:600}
+.hours b{font-size:20px}
+.progress{height:8px;background:var(--line);border-radius:6px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--green)}
+.calendar{display:grid;grid-template-columns:repeat(auto-fill,minmax(34px,1fr));gap:4px;margin-top:10px}
+.calendar .d{border-radius:6px;font-size:10px;text-align:center;padding:3px 0;background:var(--bg)}
+.calendar .d i{display:block;height:8px;margin:2px 3px 0;border-radius:3px}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(28,24,73,.45);display:grid;place-items:center;z-index:50;padding:16px}
+.modal .box{background:#fff;border-radius:16px;max-width:720px;width:100%;max-height:92vh;overflow:auto;padding:22px}
+.checklist{max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.checklist label{display:flex;gap:8px;align-items:center;padding:7px 10px;border-bottom:1px solid var(--line);cursor:pointer}
+.checklist label small{margin-left:auto;color:var(--muted)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--epal);color:#fff;padding:12px 16px;border-radius:10px;z-index:60;box-shadow:var(--shadow);max-width:380px}
+.note{font-size:12px;color:var(--muted)}
+a{color:var(--pros)}
+.drop{border:2px dashed #c7cae0;border-radius:14px;padding:30px;text-align:center;background:#fff}
+.drop.over{border-color:var(--orange);background:var(--amberbg)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:4px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+@media (max-width:700px){main{padding:14px}.card{overflow-x:auto;padding:14px}.g2,.g3{grid-template-columns:1fr}.hours{grid-template-columns:repeat(2,1fr)}header.top{padding:0 12px;gap:10px}.syncinfo{display:none}}
+@media print{
+  header.top,.noprint,.btn{display:none!important}
+  body{background:#fff} main{padding:0} .card{box-shadow:none;border:1px solid var(--line)}
+}
+</style>
+</head>
+<body>
+
+<!-- Écran de connexion (mode Firestore uniquement) -->
+<div id="login" class="modal hidden"><div class="box" style="max-width:420px;text-align:center">
+  <h1>Kronos</h1><p class="note">Suivi de l'assiduité – EPAL</p>
+  <button class="btn primary" id="btnLogin" style="margin-top:12px">Se connecter avec Google (@epal62.fr)</button>
+  <p id="loginErr" class="note" style="color:var(--red)"></p>
+</div></div>
+
+<header class="top">
+  <div class="brand"><div class="dot">⏱</div>Kronos</div>
+  <nav class="tabs" id="tabs">
+    <button data-tab="dash" class="active">Tableau de bord</button>
+    <button data-tab="eleve">Analyse par élève</button>
+    <button data-tab="ratt">Rattrapages</button>
+    <button data-tab="import">Import</button>
+    <button data-tab="param">Paramètres</button>
+  </nav>
+  <div class="syncinfo" id="syncinfo"></div>
+</header>
+
+<main>
+<!-- ============ TABLEAU DE BORD ============ -->
+<section id="tab-dash">
+  <div class="pagehead">
+    <div><h1>Tableau de bord</h1><p id="dashSub">Importez un export École Futée pour commencer.</p></div>
+    <button class="btn primary noprint" onclick="openSlotModal()">+ Nouveau créneau de rattrapage</button>
+  </div>
+  <div class="card noprint" style="margin-bottom:18px">
+    <div class="filters">
+      <div><label class="f">Classe</label><select id="fClasse"></select></div>
+      <div><label class="f">Mois</label><select id="fMois"></select></div>
+      <div><label class="f">Du</label><input type="date" id="fFrom"></div>
+      <div><label class="f">Au</label><input type="date" id="fTo"></div>
+      <div style="min-width:0"><button class="btn" id="fReset">Réinitialiser</button></div>
+    </div>
+    <p class="note" style="margin:10px 0 0">Les demi-journées « Stage / extérieur » et « Dispensé » ne sont jamais comptabilisées (ni absence, ni présence).</p>
+  </div>
+  <div class="kpis" id="dashKpis" style="margin-bottom:18px"></div>
+  <div class="grid g3" id="dashTops"></div>
+</section>
+
+<!-- ============ ANALYSE PAR ÉLÈVE ============ -->
+<section id="tab-eleve" class="hidden">
+  <div class="pagehead">
+    <div><h1>Analyse par élève</h1><p>Consultation détaillée, heures à récupérer et export PDF</p></div>
+    <button class="btn dark" onclick="window.print()">Exporter en PDF</button>
+  </div>
+  <div class="grid g2 noprint" style="margin-bottom:18px">
+    <div class="card">
+      <h2>Sélection de l'élève</h2>
+      <input type="search" id="studSearch" placeholder="Rechercher un élève…" style="margin-top:12px">
+      <div class="studlist" id="studList"></div>
+    </div>
+    <div class="card">
+      <h2>Période</h2>
+      <div class="row" style="margin-top:12px">
+        <div style="flex:1"><label class="f">Date de début</label><input type="date" id="sFrom"></div>
+        <div style="flex:1"><label class="f">Date de fin</label><input type="date" id="sTo"></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn sm" data-per="all">Toute l'année</button>
+        <button class="btn sm" data-per="month">Mois en cours</button>
+        <button class="btn sm" data-per="30">30 derniers jours</button>
+      </div>
+      <p class="note" style="margin-top:14px">La période filtre les absences/retards affichés. Les heures dues et rattrapées sont calculées sur toute l'année.</p>
+    </div>
+  </div>
+  <div id="studDetail"></div>
+</section>
+
+<!-- ============ RATTRAPAGES ============ -->
+<section id="tab-ratt" class="hidden">
+  <div class="pagehead">
+    <div><h1>Rattrapages</h1><p>Créneaux planifiés, validation des heures effectuées</p></div>
+    <button class="btn primary" onclick="openSlotModal()">+ Nouveau créneau</button>
+  </div>
+  <div class="kpis" id="rattKpis" style="margin-bottom:18px"></div>
+  <div class="card">
+    <div class="filters" style="margin-bottom:12px">
+      <div><label class="f">Statut</label><select id="rStatus">
+        <option value="open">À venir / à valider</option><option value="prevu">Prévus</option>
+        <option value="done">Réalisés (total ou partiel)</option><option value="absent">Non réalisés</option><option value="">Tous</option></select></div>
+      <div><label class="f">Classe</label><select id="rClasse"></select></div>
+      <div style="flex:1"><label class="f">Élève</label><input type="search" id="rSearch" placeholder="Nom…"></div>
+    </div>
+    <div style="overflow-x:auto"><table id="rattTable"></table></div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <h2>Bilan des heures par élève</h2>
+    <p class="note">Heures à récupérer (calcul automatique ou saisie manuelle), heures planifiées, heures effectivement récupérées.</p>
+    <div style="overflow-x:auto"><table id="bilanTable"></table></div>
+  </div>
+</section>
+
+<!-- ============ IMPORT ============ -->
+<section id="tab-import" class="hidden">
+  <div class="pagehead"><div><h1>Import École Futée</h1><p>Export « registre d'appel » au format CSV (séparateur ;)</p></div></div>
+  <div class="drop" id="drop">
+    <p><b>Glissez le fichier CSV ici</b> ou</p>
+    <label class="btn primary">Choisir un fichier<input type="file" id="fileInput" accept=".csv,text/csv" class="hidden"></label>
+    <p class="note" style="margin-top:12px">Les imports successifs se cumulent : une même demi-journée (élève + date + créneau) est remplacée par la version la plus récente.</p>
+  </div>
+  <div class="card" id="importReport" style="margin-top:18px"></div>
+</section>
+
+<!-- ============ PARAMÈTRES ============ -->
+<section id="tab-param" class="hidden">
+  <div class="pagehead"><div><h1>Paramètres</h1><p>Calcul des heures, notifications, stockage</p></div>
+    <button class="btn primary" id="saveSettings">Enregistrer</button></div>
+  <div class="grid g2">
+    <div class="card">
+      <h2>Heures à récupérer par occurrence</h2>
+      <p class="note">Sert au calcul automatique des heures dues (modifiable ensuite élève par élève).</p>
+      <table id="hoursTable"></table>
+      <div class="row" style="margin-top:12px">
+        <div style="flex:1"><label class="f">Nb min. de demi-journées pour le top assiduité (%)</label><input type="number" id="pMinPct" min="0" max="100"></div>
+        <div style="flex:1"><label class="f">Classes exclues (séparées par ,)</label><input type="text" id="pExclClasses"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Slack</h2>
+      <p class="note">URL d'un <i>Incoming Webhook</i> Slack (api.slack.com/apps → Incoming Webhooks). Un message est posté à chaque créneau de rattrapage créé.</p>
+      <label class="f">URL du webhook</label><input type="url" id="pSlack" placeholder="https://hooks.slack.com/services/…">
+      <label class="row note" style="margin-top:8px"><input type="checkbox" id="pSlackCreate"> Poster un message dès la création d'un créneau (coché par défaut dans la fenêtre)</label>
+      <label class="row note"><input type="checkbox" id="pSlackDone"> Poster aussi un message quand un rattrapage est validé</label>
+      <div style="margin-top:10px;background:var(--bg);border-radius:10px;padding:10px 12px">
+        <label class="row" style="font-weight:600"><input type="checkbox" id="pRemind"> Rappel automatique avant le début du créneau</label>
+        <div class="row" style="margin-top:6px"><input type="number" id="pRemindMin" min="5" step="5" style="width:90px"> <span class="note">minutes avant (75 = 1 h 15)</span></div>
+        <p class="note" id="remindInfo" style="margin:6px 0 0"></p>
+      </div>
+      <div class="row" style="margin-top:10px"><button class="btn sm" id="testSlack">Envoyer un message test</button></div>
+      <h2 style="margin-top:22px">Agenda « Vie EPAL »</h2>
+      <p class="note">Chaque créneau peut être ajouté à Google Agenda (lien pré-rempli) ou téléchargé en .ics.</p>
+      <label class="f">Nom de l'agenda (rappel affiché)</label><input type="text" id="pCalName">
+      <label class="f" style="margin-top:8px">ID de l'agenda Google (facultatif, ex. xxx@group.calendar.google.com)</label><input type="text" id="pCalId">
+      <label class="f" style="margin-top:8px">Lieu par défaut</label><input type="text" id="pLieu">
+    </div>
+    <div class="card">
+      <h2>Stockage</h2>
+      <p id="storeMode" class="note"></p>
+      <label class="f">Configuration Firebase (JSON copié depuis la console Firebase)</label>
+      <textarea id="pFirebase" placeholder='{"apiKey":"…","authDomain":"…","projectId":"…"}'></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="btn sm" id="saveFirebase">Activer Firestore & recharger</button>
+        <button class="btn sm danger" id="clearFirebase">Revenir au stockage local</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Sauvegarde</h2>
+      <p class="note">Export/import complet des données (appels, rattrapages, heures saisies, paramètres).</p>
+      <div class="row">
+        <button class="btn sm" id="exportJson">Exporter (.json)</button>
+        <label class="btn sm">Restaurer (.json)<input type="file" id="importJson" accept=".json" class="hidden"></label>
+        <button class="btn sm danger" id="wipe">Effacer les appels importés</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ MODALE CRÉNEAU ============ -->
+<div id="slotModal" class="modal hidden"><div class="box">
+  <div class="tophead"><h2 id="slotTitle">Nouveau créneau de rattrapage</h2><button class="btn sm" onclick="closeModal('slotModal')">✕</button></div>
+  <label class="f">Élève(s)</label>
+  <input type="search" id="slotSearch" placeholder="Filtrer…" style="margin-bottom:6px">
+  <div class="checklist" id="slotStudents"></div>
+  <div class="row" style="margin-top:12px">
+    <div style="flex:1.3"><label class="f">Date</label><input type="date" id="slotDate"></div>
+    <div style="flex:1"><label class="f">Début</label><input type="time" id="slotStart" value="13:30"></div>
+    <div style="flex:1"><label class="f">Fin</label><input type="time" id="slotEnd" value="16:30"></div>
+    <div style="flex:1"><label class="f">Heures prévues</label><input type="number" step="0.25" min="0" id="slotHours"></div>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <div style="flex:1"><label class="f">Encadrant</label><input type="text" id="slotWho" placeholder="Nom de l'encadrant"></div>
+    <div style="flex:1"><label class="f">Lieu</label><input type="text" id="slotLieu"></div>
+  </div>
+  <label class="f" style="margin-top:10px">Motif / activité</label><input type="text" id="slotMotif" placeholder="ex. Rattrapage atelier – absences injustifiées de septembre">
+  <div id="slotNotify" style="margin-top:14px;background:var(--bg);border-radius:10px;padding:10px 12px">
+    <label class="row"><input type="checkbox" id="nSlack" checked> Poster un message Slack maintenant</label>
+    <p class="note" id="nRemind" style="margin:2px 0 6px 24px"></p>
+    <label class="row"><input type="checkbox" id="nGcal" checked> Ouvrir Google Agenda pour ajouter l'évènement</label>
+    <label class="row"><input type="checkbox" id="nIcs"> Télécharger le fichier .ics</label>
+  </div>
+  <div class="row" style="justify-content:flex-end;margin-top:16px">
+    <button class="btn" onclick="closeModal('slotModal')">Annuler</button>
+    <button class="btn primary" id="slotSave">Enregistrer le créneau</button>
+  </div>
+</div></div>
+
+<!-- ============ MODALE VALIDATION ============ -->
+<div id="valModal" class="modal hidden"><div class="box" style="max-width:460px">
+  <div class="tophead"><h2>Valider le rattrapage</h2><button class="btn sm" onclick="closeModal('valModal')">✕</button></div>
+  <p id="valInfo" class="note"></p>
+  <label class="f">Heures effectivement récupérées</label><input type="number" step="0.25" min="0" id="valHours">
+  <label class="f" style="margin-top:10px">Commentaire</label><input type="text" id="valNote">
+  <div class="row" style="justify-content:flex-end;margin-top:16px">
+    <button class="btn danger" id="valAbsent">Élève absent (0 h)</button>
+    <button class="btn primary" id="valOk">Valider</button>
+  </div>
+</div></div>
+
+<script>
+/* =====================================================================
+   KRONOS – suivi d'assiduité EPAL
+   Fichier unique : HTML + CSS + JS. Aucune dépendance obligatoire.
+   Stockage : localStorage par défaut, Firestore si une config Firebase
+   est renseignée (constante FIREBASE_CONFIG ci-dessous ou Paramètres).
+   ===================================================================== */
+
+// Pour un déploiement d'équipe (GitHub Pages), coller ici la config Firebase :
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCR8kTfjr9g7wtreEkP3p0QcJqSCuBoSfQ",
+  authDomain: "kronos-c3c4f.firebaseapp.com",
+  projectId: "kronos-c3c4f",
+  storageBucket: "kronos-c3c4f.firebasestorage.app",
+  messagingSenderId: "846793839731",
+  appId: "1:846793839731:web:e8965f479d65be7b260606"
+};
+const ALLOWED_DOMAIN = 'epal62.fr';
+const FB_VERSION = '10.12.2';
+
+/* ---------- Référentiel des statuts École Futée ---------- */
+const CATS = {
+  abs_inj: {label:'Absences injustifiées', short:'abs. injust.', status:'Absence injustifiée', type:'abs', color:'#d93a3a', cls:'c-red'},
+  abs_jf:  {label:'Absences justifiées (formel)', short:'abs. just. formel', status:'Absence justifiée (formel)', type:'abs', color:'#f18612', cls:'c-amber'},
+  abs_ji:  {label:'Absences justifiées (informel)', short:'abs. just. informel', status:'Absence justifiée (informel)', type:'abs', color:'#e0a33a', cls:'c-yellow'},
+  ret_5:   {label:'Retards -5 min', short:'retard -5 min', status:'Retard -5min', type:'ret', color:'#8f6ad8', cls:'c-violet'},
+  ret_30:  {label:'Retards 5 à 30 min', short:'retard 5-30 min', status:'Retard 5à30min', type:'ret', color:'#7a3fc4', cls:'c-violet'},
+  ret_p30: {label:'Retards +30 min', short:'retard +30 min', status:'Retard +30min', type:'ret', color:'#5a1f9e', cls:'c-violet'},
+  ret_j:   {label:'Retards justifiés', short:'retard just.', status:'Retard justifié', type:'ret', color:'#008acd', cls:'c-blue'},
+};
+const CAT_KEYS = Object.keys(CATS);
+const norm = s => (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,'');
+function statusKey(s){
+  const n = norm(s);
+  if (!n) return null;
+  if (n.startsWith('present')) return 'present';
+  if (n.startsWith('stage') || n.includes('exterieur')) return 'stage';
+  if (n.startsWith('dispens')) return 'disp';
+  if (n.includes('absence') && n.includes('injust')) return 'abs_inj';
+  if (n.includes('absence') && n.includes('informel')) return 'abs_ji';
+  if (n.includes('absence') && n.includes('just')) return 'abs_jf';
+  if (n.includes('retard') && n.includes('just')) return 'ret_j';
+  if (n.includes('retard') && n.includes('-5')) return 'ret_5';
+  if (n.includes('retard') && n.includes('+30')) return 'ret_p30';
+  if (n.includes('retard')) return 'ret_30';
+  return 'other';
+}
+const EXCLUDED = new Set(['stage','disp','other']);
+
+const DEFAULT_SETTINGS = {
+  hours:{abs_inj:3.5, abs_jf:0, abs_ji:0, ret_5:0, ret_30:0.5, ret_p30:1, ret_j:0},
+  minPct:60, exclClasses:['Classe test'],
+  slackWebhook:'', slackOnCreate:true, slackOnDone:false, reminderOn:true, reminderMin:75,
+  calName:'Vie EPAL', calId:'', lieu:'EPAL – 69 bis route de Béthune, 62300 Lens',
+};
+
+/* ---------- État ---------- */
+const S = {
+  rows:[],          // {k:studentKey, nom, prenom, classe, date:'YYYY-MM-DD', cr:'Matin'|'Après-midi', st:statusKey, raw, arr, resp}
+  students:new Map(),// key -> {key, nom, prenom, classe, name}
+  ratt:[],          // rattrapages
+  overrides:{},     // key -> heures dues saisies manuellement
+  settings:structuredClone(DEFAULT_SETTINGS),
+  selStudent:null,
+  user:null,
+};
+
+/* ---------- Utilitaires ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => (s??'').toString().replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtH = h => (Math.round((h||0)*100)/100).toLocaleString('fr-FR',{maximumFractionDigits:2})+' h';
+const fmtMin = m => { m=+m||0; const h=Math.floor(m/60), r=m%60; return h?`${h} h${r?' '+String(r).padStart(2,'0'):''}`:`${r} min`; };
+const fmtD = iso => iso ? iso.split('-').reverse().join('/') : '';
+const fmtDL = iso => new Date(iso+'T12:00').toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'});
+const pct = (a,b) => b ? Math.round(a/b*1000)/10 : 0;
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const studentKey = (nom,prenom) => norm(nom).replace(/[^a-z0-9]/g,'')+'_'+norm(prenom).replace(/[^a-z0-9]/g,'');
+const MONTHS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+function toast(msg, ms=3500){const n=document.querySelectorAll('.toast').length;const t=document.createElement('div');t.className='toast';t.style.bottom=(20+n*60)+'px';t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),ms)}
+function closeModal(id){$(id).classList.add('hidden')}
+function hoursBetween(a,b){if(!a||!b)return 0;const [h1,m1]=a.split(':').map(Number),[h2,m2]=b.split(':').map(Number);return Math.max(0,(h2*60+m2-h1*60-m1)/60)}
+
+/* =====================================================================
+   STOCKAGE (adaptateur local / Firestore)
+   ===================================================================== */
+const LS = {
+  get(k,d){try{const v=localStorage.getItem('kronos_'+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('kronos_'+k,JSON.stringify(v))}catch(e){toast('⚠️ Stockage local plein ou indisponible')}}
+};
+const Store = {
+  mode:'local', db:null,
+  async init(){
+    const cfg = FIREBASE_CONFIG || LS.get('firebaseConfig', null);
+    if (!cfg) return this.loadLocal();
+    try{
+      await loadScript(`https://www.gstatic.com/firebasejs/${FB_VERSION}/firebase-app-compat.js`);
+      await loadScript(`https://www.gstatic.com/firebasejs/${FB_VERSION}/firebase-auth-compat.js`);
+      await loadScript(`https://www.gstatic.com/firebasejs/${FB_VERSION}/firebase-firestore-compat.js`);
+      firebase.initializeApp(cfg);
+      this.mode='firestore'; this.db=firebase.firestore();
+      await new Promise(res=>{
+        firebase.auth().onAuthStateChanged(async u=>{
+          if (u && u.email && u.email.endsWith('@'+ALLOWED_DOMAIN)){ S.user=u; $('login').classList.add('hidden'); await this.loadRemote(); res(); refreshAll(); }
+          else { if(u){ await firebase.auth().signOut(); $('loginErr').textContent='Compte non autorisé : utilisez une adresse @'+ALLOWED_DOMAIN; } $('login').classList.remove('hidden'); res(); }
+        });
+      });
+      $('btnLogin').onclick=()=>{const p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({hd:ALLOWED_DOMAIN});firebase.auth().signInWithPopup(p).catch(e=>$('loginErr').textContent=e.message)};
+    }catch(e){ console.error(e); toast('⚠️ Firestore indisponible, bascule en stockage local'); this.mode='local'; this.loadLocal(); }
+  },
+  loadLocal(){
+    ingestRows(LS.get('rows',[]), false);
+    S.ratt = LS.get('ratt',[]); S.overrides = LS.get('overrides',{});
+    S.settings = {...structuredClone(DEFAULT_SETTINGS), ...LS.get('settings',{})};
+  },
+  async loadRemote(){
+    const db=this.db;
+    const [att, ratt, meta] = await Promise.all([db.collection('kronos_attendance').get(), db.collection('kronos_rattrapages').get(), db.collection('kronos_meta').get()]);
+    const rows=[]; att.forEach(d=>{const x=d.data(); (x.records||[]).forEach(r=>rows.push({k:d.id,nom:x.nom,prenom:x.prenom,classe:x.classe,...r}))});
+    S.rows=[]; S.students.clear(); ingestRows(rows,false);
+    S.ratt=[]; ratt.forEach(d=>S.ratt.push({...d.data(),id:d.id}));
+    meta.forEach(d=>{ if(d.id==='settings') S.settings={...structuredClone(DEFAULT_SETTINGS),...d.data()}; if(d.id==='overrides') S.overrides=d.data()||{}; });
+  },
+  async saveRows(changedKeys){
+    if (this.mode==='local') return LS.set('rows', S.rows);
+    const by = groupBy(S.rows.filter(r=>changedKeys.has(r.k)), r=>r.k);
+    let batch=this.db.batch(), n=0;
+    for (const [k,list] of by){
+      const s=S.students.get(k);
+      batch.set(this.db.collection('kronos_attendance').doc(k.replace(/\//g,'_')), {nom:s.nom,prenom:s.prenom,classe:s.classe,
+        records:list.map(({date,cr,st,raw,arr,resp})=>({date,cr,st,raw,arr:arr||'',resp:resp||''})), updatedAt:new Date().toISOString()});
+      if (++n>=400){await batch.commit();batch=this.db.batch();n=0}
+    }
+    await batch.commit();
+  },
+  async clearRows(){
+    if (this.mode==='local') return LS.set('rows',[]);
+    const snap=await this.db.collection('kronos_attendance').get(); const b=this.db.batch(); snap.forEach(d=>b.delete(d.ref)); await b.commit();
+  },
+  async saveRatt(r){ if(this.mode==='local') return LS.set('ratt',S.ratt); await this.db.collection('kronos_rattrapages').doc(r.id).set(r,{merge:true}); },
+  async deleteRatt(id){ if(this.mode==='local') return LS.set('ratt',S.ratt); await this.db.collection('kronos_rattrapages').doc(id).delete(); },
+  async saveOverrides(){ if(this.mode==='local') return LS.set('overrides',S.overrides); await this.db.collection('kronos_meta').doc('overrides').set(S.overrides); },
+  async saveSettings(){ if(this.mode==='local') return LS.set('settings',S.settings); await this.db.collection('kronos_meta').doc('settings').set(S.settings); },
+};
+function loadScript(src){return new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=ko;document.head.appendChild(s)})}
+function groupBy(arr,f){const m=new Map();for(const x of arr){const k=f(x);if(!m.has(k))m.set(k,[]);m.get(k).push(x)}return m}
+
+/* =====================================================================
+   IMPORT CSV
+   ===================================================================== */
+function parseCSV(text){
+  text=text.replace(/^\uFEFF/,'');
+  const first=text.split(/\r?\n/)[0]; const sep=(first.split(';').length>=first.split(',').length)?';':',';
+  const out=[]; let row=[], cur='', q=false;
+  for (let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++} else q=false } else cur+=c; }
+    else if(c==='"') q=true;
+    else if(c===sep){row.push(cur);cur=''}
+    else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n')i++; row.push(cur);cur=''; if(row.some(v=>v!==''))out.push(row); row=[]; }
+    else cur+=c;
+  }
+  row.push(cur); if(row.some(v=>v!==''))out.push(row);
+  return out;
+}
+function csvToRows(text){
+  const t=parseCSV(text); if(!t.length) throw new Error('Fichier vide');
+  const h=t[0].map(norm); const idx=name=>h.findIndex(x=>x.startsWith(norm(name)));
+  const I={nom:idx('Nom'),prenom:idx('Prénom'),classe:idx('Classe'),resp:idx('Responsable'),date:idx('Date'),cr:idx('Créneau'),st:idx('Statut'),arr:idx("Heure d'arrivée")};
+  for (const k of ['nom','prenom','date','st']) if(I[k]<0) throw new Error('Colonne manquante : '+k);
+  const rows=[], unknown=new Map();
+  for (const r of t.slice(1)){
+    const d=(r[I.date]||'').trim(); const m=d.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); if(!m) continue;
+    const raw=(r[I.st]||'').trim(); const st=statusKey(raw);
+    if(st==='other') unknown.set(raw,(unknown.get(raw)||0)+1);
+    const nom=(r[I.nom]||'').trim(), prenom=(r[I.prenom]||'').trim();
+    rows.push({k:studentKey(nom,prenom), nom, prenom, classe:(r[I.classe]||'').trim(),
+      date:`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`, cr:(r[I.cr]||'').trim()||'Journée',
+      st, raw, arr:I.arr>=0?(r[I.arr]||'').trim():'', resp:I.resp>=0?(r[I.resp]||'').trim():''});
+  }
+  return {rows, unknown};
+}
+function ingestRows(newRows, merge=true){
+  const map=new Map(S.rows.map(r=>[r.k+'|'+r.date+'|'+r.cr, r]));
+  let added=0, replaced=0;
+  for (const r of newRows){ const id=r.k+'|'+r.date+'|'+r.cr; if(map.has(id)) replaced++; else added++; map.set(id,r); }
+  S.rows=[...map.values()].sort((a,b)=>a.date.localeCompare(b.date));
+  // référentiel élèves (classe = la plus récente)
+  S.students.clear();
+  for (const r of S.rows){ S.students.set(r.k,{key:r.k,nom:r.nom,prenom:r.prenom,classe:r.classe,name:`${r.prenom} ${r.nom}`}); }
+  return {added,replaced};
+}
+async function handleCSV(file){
+  const text=await file.text();
+  try{
+    const {rows,unknown}=csvToRows(text);
+    const {added,replaced}=ingestRows(rows);
+    await Store.saveRows(new Set(rows.map(r=>r.k)));
+    const cnt={}; rows.forEach(r=>cnt[r.raw]=(cnt[r.raw]||0)+1);
+    const dates=rows.map(r=>r.date).sort();
+    $('importReport').innerHTML=`<h2>✅ Import réussi – ${esc(file.name)}</h2>
+      <p>${rows.length} demi-journées lues (${added} nouvelles, ${replaced} mises à jour), ${new Set(rows.map(r=>r.k)).size} élèves, du ${fmtD(dates[0])} au ${fmtD(dates.at(-1))}.</p>
+      <table><tr><th>Statut École Futée</th><th>Catégorie Kronos</th><th class="num">Nb</th></tr>
+      ${Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([s,n])=>{const k=statusKey(s);return `<tr><td>${esc(s)}</td><td>${k==='present'?'Présent':EXCLUDED.has(k)?'<i>Non comptabilisé</i>':CATS[k].label}</td><td class="num">${n}</td></tr>`}).join('')}</table>
+      ${unknown.size?`<p style="color:var(--red)">⚠️ Statuts non reconnus (ignorés) : ${[...unknown.keys()].map(esc).join(', ')}</p>`:''}`;
+    refreshAll(); toast('Import terminé');
+  }catch(e){ $('importReport').innerHTML=`<p style="color:var(--red)">Erreur : ${esc(e.message)}</p>`; }
+}
+
+/* =====================================================================
+   CALCULS
+   ===================================================================== */
+function activeRows(f={}){
+  const excl=new Set((S.settings.exclClasses||[]).map(norm));
+  return S.rows.filter(r=>!excl.has(norm(r.classe))
+    && (!f.classe || r.classe===f.classe) && (!f.from || r.date>=f.from) && (!f.to || r.date<=f.to)
+    && (!f.key || r.k===f.key));
+}
+function suggestedHours(c){ return CAT_KEYS.reduce((s,k)=>s+(c[k]||0)*(+S.settings.hours[k]||0),0); }
+function rattFor(key){ return S.ratt.filter(r=>r.studentKey===key); }
+function hoursDone(key){ return rattFor(key).reduce((s,r)=>s+(r.status==='realise'||r.status==='partiel'?(+r.hDone||0):0),0); }
+function hoursPlanned(key){ return rattFor(key).reduce((s,r)=>s+(r.status==='prevu'?(+r.hPlanned||0):0),0); }
+function duesOf(key, yearStats){ const o=S.overrides[key]; return (o!==undefined && o!==null && o!=='') ? {v:+o,manual:true} : {v:suggestedHours(yearStats),manual:false}; }
+function computeStats(rows){
+  const m=new Map();
+  for (const r of rows){
+    if(!m.has(r.k)){ const s=S.students.get(r.k); m.set(r.k,{key:r.k,name:s.name,classe:s.classe,counted:0,present:0,excluded:0,...Object.fromEntries(CAT_KEYS.map(k=>[k,0]))}); }
+    const x=m.get(r.k);
+    if(EXCLUDED.has(r.st)){x.excluded++;continue}
+    x.counted++;
+    if(r.st==='present') x.present++; else x[r.st]++;
+  }
+  for (const x of m.values()){
+    x.abs=x.abs_inj+x.abs_jf+x.abs_ji; x.ret=x.ret_5+x.ret_30+x.ret_p30+x.ret_j;
+    x.problems=x.abs+x.ret; x.presRate=pct(x.counted-x.abs,x.counted); x.punctRate=pct(x.present,x.counted);
+  }
+  return m;
+}
+let yearStatsCache=null;
+function yearStats(){ if(!yearStatsCache) yearStatsCache=computeStats(activeRows()); return yearStatsCache; }
+
+/* =====================================================================
+   RENDU – TABLEAU DE BORD
+   ===================================================================== */
+function dashFilters(){ return {classe:$('fClasse').value, from:$('fFrom').value, to:$('fTo').value}; }
+function fillSelects(){
+  const excl=new Set((S.settings.exclClasses||[]).map(norm));
+  const classes=[...new Set(S.rows.map(r=>r.classe))].filter(c=>!excl.has(norm(c))).sort();
+  for (const id of ['fClasse','rClasse']){ const v=$(id).value; $(id).innerHTML='<option value="">Toutes les classes</option>'+classes.map(c=>`<option ${c===v?'selected':''}>${esc(c)}</option>`).join(''); }
+  const months=[...new Set(S.rows.map(r=>r.date.slice(0,7)))].sort();
+  const v=$('fMois').value;
+  $('fMois').innerHTML='<option value="">Tous les mois</option>'+months.map(m=>`<option value="${m}" ${m===v?'selected':''}>${MONTHS[+m.slice(5)-1]} ${m.slice(0,4)}</option>`).join('');
+}
+function rankRow(i,x,val,unit,chips,color){
+  return `<div class="rank" onclick="goStudent('${esc(x.key)}')">
+    <div class="n" style="background:${color}">${i+1}</div>
+    <div class="who"><b>${esc(x.name)}</b><span>${esc(x.classe)}</span><div class="chips">${chips}</div></div>
+    <div class="val"><b>${val}</b><span>${unit}</span></div></div>`;
+}
+function chip(txt,cls){return `<span class="chip ${cls}" style="background:transparent">${txt}</span>`}
+function recoveryChips(key){
+  const ys=yearStats().get(key); const due=ys?duesOf(key,ys).v:0; const done=hoursDone(key); let c='';
+  if(due>0) c+=chip(`${fmtH(due)} à récupérer`,'c-red');
+  if(done>0) c+=chip(`⏱ ${fmtH(done)} rattrapées`,'c-green');
+  return c;
+}
+function renderDash(){
+  const f=dashFilters(); const stats=[...computeStats(activeRows(f)).values()];
+  const rows=activeRows(f);
+  const nb=rows.length, excl=rows.filter(r=>EXCLUDED.has(r.st)).length, counted=nb-excl;
+  const tot=k=>stats.reduce((s,x)=>s+x[k],0);
+  const period = f.from||f.to ? `du ${fmtD(f.from)||'début'} au ${fmtD(f.to)||'aujourd\'hui'}` : 'toute la période importée';
+  $('dashSub').textContent = S.rows.length ? `${stats.length} élèves · ${counted} demi-journées comptabilisées (${excl} stage/dispensé écartées) · ${period}` : 'Importez un export École Futée pour commencer (onglet Import).';
+  const tAbs=tot('abs'), tRet=tot('ret');
+  $('dashKpis').innerHTML = `
+    <div class="kpi c-green"><div class="l">Taux de présence</div><div class="v">${pct(counted-tAbs,counted)} %</div><div class="s">${counted-tAbs} / ${counted} demi-journées</div></div>
+    <div class="kpi c-red"><div class="l">Absences injustifiées</div><div class="v">${tot('abs_inj')}</div><div class="s">demi-journées</div></div>
+    <div class="kpi c-amber"><div class="l">Absences justifiées</div><div class="v">${tot('abs_jf')+tot('abs_ji')}</div><div class="s">${tot('abs_jf')} formel · ${tot('abs_ji')} informel</div></div>
+    <div class="kpi c-violet"><div class="l">Retards</div><div class="v">${tRet}</div><div class="s">dont ${tot('ret_j')} justifiés</div></div>
+    <div class="kpi c-epal"><div class="l">Heures rattrapées</div><div class="v">${fmtH(S.ratt.reduce((s,r)=>s+(['realise','partiel'].includes(r.status)?+r.hDone||0:0),0))}</div><div class="s">${S.ratt.filter(r=>r.status==='prevu').length} créneau(x) à venir / à valider</div></div>`;
+  if(!stats.length){ $('dashTops').innerHTML='<div class="card empty">Aucune donnée pour ces filtres.</div>'; return; }
+  const cards=[];
+  // Top global absences
+  const topAbs=stats.filter(x=>x.abs>0).sort((a,b)=>b.abs-a.abs||b.abs_inj-a.abs_inj).slice(0,5);
+  cards.push(card('⚠️ Top 5 – toutes absences', 'demi-journées', topAbs.map((x,i)=>rankRow(i,x,x.abs,'absences',
+    (x.abs_jf+x.abs_ji?chip(`${x.abs_jf+x.abs_ji} justifiée${x.abs_jf+x.abs_ji>1?'s':''}`,'c-amber'):'')+(x.abs_inj?chip(`${x.abs_inj} injustifiée${x.abs_inj>1?'s':''}`,'c-red'):'')+recoveryChips(x.key),'linear-gradient(135deg,#f18612,#d93a3a)'))));
+  // Top par catégorie
+  for (const k of CAT_KEYS){
+    const c=CATS[k]; const top=stats.filter(x=>x[k]>0).sort((a,b)=>b[k]-a[k]||b.problems-a.problems).slice(0,5);
+    cards.push(card(`${c.type==='abs'?'🚫':'⏰'} Top 5 – ${c.label}`, c.type==='abs'?'demi-journées':'occurrences',
+      top.map((x,i)=>rankRow(i,x,x[k],c.type==='abs'?'demi-j.':'retards', chip(`${x.presRate} % présence`,'c-green')+(k==='abs_inj'||k.startsWith('ret_')&&k!=='ret_j'?recoveryChips(x.key):''), c.color))));
+  }
+  // Top assiduité
+  const maxC=Math.max(...stats.map(x=>x.counted)); const min=Math.ceil(maxC*(+S.settings.minPct||0)/100);
+  const topA=stats.filter(x=>x.counted>=min).sort((a,b)=>a.problems-b.problems||b.presRate-a.presRate||b.counted-a.counted).slice(0,5);
+  const medal=['#d4a800','#9aa0b5','#b8733a','#37439b','#37439b'];
+  cards.push(card('🏆 Top 5 – élèves les plus assidus', `min. ${min} demi-j. comptabilisées`, topA.map((x,i)=>rankRow(i,x,x.problems,x.problems>1?'problèmes':'problème',
+    chip(`${x.presRate} % présence`,'c-green')+chip(`${x.punctRate} % à l'heure`,'c-blue')+(x.abs?chip(`${x.abs} abs.`,'c-amber'):'')+(x.ret?chip(`${x.ret} retard${x.ret>1?'s':''}`,'c-violet'):''), medal[i]))));
+  $('dashTops').innerHTML=cards.join('');
+}
+function card(title,sub,items){
+  return `<div class="card"><div class="tophead"><h2>${title}</h2><small>${sub}</small></div>${items.length?items.join(''):'<div class="empty">Aucun élève concerné 👍</div>'}</div>`;
+}
+
+/* =====================================================================
+   RENDU – ANALYSE PAR ÉLÈVE
+   ===================================================================== */
+function renderStudList(){
+  const q=norm($('studSearch').value); const excl=new Set((S.settings.exclClasses||[]).map(norm));
+  const ys=yearStats();
+  const list=[...S.students.values()].filter(s=>!excl.has(norm(s.classe))&&(!q||norm(s.name+s.classe).includes(q))).sort((a,b)=>a.classe.localeCompare(b.classe)||a.nom.localeCompare(b.nom));
+  $('studList').innerHTML=list.map(s=>{const y=ys.get(s.key);return `<div class="${s.key===S.selStudent?'sel':''}" onclick="selectStudent('${esc(s.key)}')"><span>${esc(s.prenom)} <b>${esc(s.nom)}</b> <small>(${esc(s.classe)})</small></span><small>${y?y.abs+' abs · '+y.ret+' ret':''}</small></div>`}).join('')||'<div class="empty">Aucun élève</div>';
+}
+function selectStudent(k){ S.selStudent=k; renderStudList(); renderStudent(); }
+function goStudent(k){ showTab('eleve'); selectStudent(k); window.scrollTo(0,0); }
+function renderStudent(){
+  const k=S.selStudent, box=$('studDetail');
+  if(!k||!S.students.get(k)){ box.innerHTML='<div class="card empty">Sélectionnez un élève.</div>'; return; }
+  const s=S.students.get(k); const f={key:k,from:$('sFrom').value,to:$('sTo').value};
+  const rows=activeRows(f); const x=computeStats(rows).get(k)||{counted:0,present:0,abs:0,ret:0,excluded:0,...Object.fromEntries(CAT_KEYS.map(c=>[c,0]))};
+  const ys=yearStats().get(k)||x; const due=duesOf(k,ys); const done=hoursDone(k), planned=hoursPlanned(k); const rest=Math.max(0,due.v-done);
+  const color=st=>st==='present'?'#18915a':EXCLUDED.has(st)?'#c9cbe6':CATS[st].color;
+  const days=groupBy(rows,r=>r.date);
+  const events=rows.filter(r=>r.st!=='present').sort((a,b)=>b.date.localeCompare(a.date));
+  const rl=rattFor(k).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  box.innerHTML=`
+  <div class="card" style="margin-bottom:18px"><div class="tophead"><h2 style="font-size:22px">${esc(s.prenom)} ${esc(s.nom)} <small style="font-weight:500;color:var(--muted);font-size:14px">(${esc(s.classe)})</small></h2>
+    <small>${x.counted} demi-journées comptabilisées · ${x.excluded} stage/dispensé écartées</small></div>
+  <div class="kpis">
+    <div class="kpi c-green"><div class="l">Taux de présence</div><div class="v">${pct(x.counted-x.abs,x.counted)} %</div><div class="s">${x.counted-x.abs} / ${x.counted}</div></div>
+    <div class="kpi c-red"><div class="l">Abs. injustifiées</div><div class="v">${x.abs_inj}</div><div class="s">${pct(x.abs_inj,x.counted)} %</div></div>
+    <div class="kpi c-amber"><div class="l">Abs. justifiées</div><div class="v">${x.abs_jf+x.abs_ji}</div><div class="s">${x.abs_jf} formel · ${x.abs_ji} informel</div></div>
+    <div class="kpi c-violet"><div class="l">Retards injustifiés</div><div class="v">${x.ret_5+x.ret_30+x.ret_p30}</div><div class="s">${x.ret_5} (-5) · ${x.ret_30} (5-30) · ${x.ret_p30} (+30)</div></div>
+    <div class="kpi c-blue"><div class="l">Retards justifiés</div><div class="v">${x.ret_j}</div><div class="s">&nbsp;</div></div>
+  </div>
+  <div class="calendar">${[...days].map(([d,l])=>`<div class="d" title="${fmtD(d)}">${d.slice(8)}/${d.slice(5,7)}${['Matin','Après-midi'].map(c=>{const r=l.find(z=>z.cr===c);return `<i style="background:${r?color(r.st):'transparent'}" title="${c} : ${r?esc(r.raw):'—'}"></i>`}).join('')}</div>`).join('')}</div>
+  <div class="legend"><span><i style="background:#18915a"></i>Présent</span>${CAT_KEYS.map(c=>`<span><i style="background:${CATS[c].color}"></i>${CATS[c].short}</span>`).join('')}<span><i style="background:#c9cbe6"></i>Stage / dispensé</span></div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="tophead"><h2>Heures à récupérer</h2><button class="btn primary sm noprint" onclick="openSlotModal(['${esc(k)}'])">+ Nouveau créneau</button></div>
+      <div class="hours">
+        <div><small>À récupérer</small><b>${fmtH(due.v)}</b><small>${due.manual?'saisie manuelle':'calcul auto'}</small></div>
+        <div><small>Planifiées</small><b>${fmtH(planned)}</b></div>
+        <div><small>Récupérées</small><b style="color:var(--green)">${fmtH(done)}</b></div>
+        <div><small>Reste</small><b style="color:${rest>0?'var(--red)':'var(--green)'}">${fmtH(rest)}</b></div>
+      </div>
+      <div class="progress"><i style="width:${due.v?Math.min(100,done/due.v*100):0}%"></i></div>
+      <div class="row noprint" style="margin-top:14px">
+        <label class="f" style="margin:0">Heures à récupérer (saisie manuelle)</label>
+        <input type="number" step="0.25" min="0" id="dueInput" style="width:110px" value="${due.manual?due.v:''}" placeholder="${fmtH(suggestedHours(ys)).replace(' h','')}">
+        <button class="btn sm" onclick="saveDue('${esc(k)}')">Enregistrer</button>
+        ${due.manual?`<button class="btn sm" onclick="saveDue('${esc(k)}',true)">Revenir au calcul auto</button>`:''}
+      </div>
+      <p class="note">Calcul auto (année) : ${CAT_KEYS.filter(c=>ys[c]&&S.settings.hours[c]).map(c=>`${ys[c]} × ${CATS[c].short} × ${S.settings.hours[c]} h`).join(' + ')||'aucune heure due'}.</p>
+      <h2 style="margin-top:14px">Créneaux de rattrapage</h2>
+      ${rl.length?`<table>${rl.map(r=>rattRowSimple(r)).join('')}</table>`:'<div class="empty">Aucun rattrapage</div>'}
+    </div>
+    <div class="card">
+      <h2>Détail des absences et retards</h2>
+      ${events.length?`<table><tr><th>Date</th><th>Créneau</th><th>Statut</th><th>Arrivée</th></tr>${events.map(r=>`<tr><td>${fmtDL(r.date)}</td><td>${esc(r.cr)}</td><td><span class="badge" style="background:${color(r.st)}22;color:${color(r.st)}">${esc(r.raw)}</span></td><td>${esc(r.arr)}</td></tr>`).join('')}</table>`:'<div class="empty">Rien à signaler sur la période 👍</div>'}
+    </div>
+  </div>`;
+}
+async function saveDue(k,reset){
+  if(reset) delete S.overrides[k]; else { const v=$('dueInput').value; if(v==='') delete S.overrides[k]; else S.overrides[k]=+v; }
+  await Store.saveOverrides(); refreshAll(); toast('Heures à récupérer enregistrées');
+}
+
+/* =====================================================================
+   RATTRAPAGES
+   ===================================================================== */
+const RSTAT={prevu:['Prévu','c-blue'],realise:['Réalisé','c-green'],partiel:['Partiel','c-amber'],absent:['Non réalisé','c-red']};
+function statusBadge(r){const [l,c]=RSTAT[r.status]||['?',''];return `<span class="badge ${c}">${l}</span>`}
+function rattRowSimple(r){
+  return `<tr><td>${fmtDL(r.date)}<br><small class="note">${r.start||''}–${r.end||''}</small></td><td>${statusBadge(r)}</td>
+  <td class="num">${r.status==='prevu'?fmtH(r.hPlanned)+' prévues':fmtH(r.hDone)+' / '+fmtH(r.hPlanned)}</td>
+  <td class="num noprint">${r.status==='prevu'?`<button class="btn sm" onclick="openValidate('${r.id}')">Valider</button>`:`<button class="btn sm" onclick="openValidate('${r.id}')">Modifier</button>`}</td></tr>`;
+}
+function renderRatt(){
+  const st=$('rStatus').value, cl=$('rClasse').value, q=norm($('rSearch').value); const today=new Date().toISOString().slice(0,10);
+  let list=S.ratt.filter(r=>(!cl||r.classe===cl)&&(!q||norm(r.studentName).includes(q)));
+  if(st==='open') list=list.filter(r=>r.status==='prevu'); else if(st==='done') list=list.filter(r=>r.status==='realise'||r.status==='partiel'); else if(st) list=list.filter(r=>r.status===st);
+  list.sort((a,b)=>st==='open'||st==='prevu'?(a.date+a.start).localeCompare(b.date+b.start):(b.date+b.start).localeCompare(a.date+a.start));
+  const done=S.ratt.filter(r=>['realise','partiel'].includes(r.status));
+  const ys=yearStats(); const totalDue=[...ys.keys()].reduce((s,k)=>s+duesOf(k,ys.get(k)).v,0);
+  $('rattKpis').innerHTML=`
+    <div class="kpi c-red"><div class="l">Heures à récupérer (total)</div><div class="v">${fmtH(totalDue)}</div></div>
+    <div class="kpi c-blue"><div class="l">Heures planifiées</div><div class="v">${fmtH(S.ratt.filter(r=>r.status==='prevu').reduce((s,r)=>s+(+r.hPlanned||0),0))}</div><div class="s">${S.ratt.filter(r=>r.status==='prevu').length} créneau(x)</div></div>
+    <div class="kpi c-green"><div class="l">Heures récupérées</div><div class="v">${fmtH(done.reduce((s,r)=>s+(+r.hDone||0),0))}</div><div class="s">${done.length} rattrapage(s) validé(s)</div></div>
+    <div class="kpi c-amber"><div class="l">À valider</div><div class="v">${S.ratt.filter(r=>r.status==='prevu'&&r.date<today).length}</div><div class="s">créneaux passés non validés</div></div>`;
+  $('rattTable').innerHTML=list.length?`<tr><th>Date</th><th>Élève</th><th>Motif / encadrant</th><th>Statut</th><th class="num">Prévues</th><th class="num">Effectuées</th><th></th></tr>`+list.map(r=>`
+    <tr style="${r.status==='prevu'&&r.date<today?'background:#fff8ef':''}"><td>${fmtDL(r.date)}<br><small class="note">${r.start}–${r.end}</small></td>
+    <td><a href="#" onclick="goStudent('${esc(r.studentKey)}');return false"><b>${esc(r.studentName)}</b></a><br><small class="note">${esc(r.classe)}</small></td>
+    <td>${esc(r.motif)}<br><small class="note">${[r.encadrant,r.lieu].filter(Boolean).map(esc).join(' · ')}</small></td>
+    <td>${statusBadge(r)}${r.reminderSentAt?'<br><small class="note" title="Rappel Slack envoyé">🔔 rappel envoyé</small>':''}</td><td class="num">${fmtH(r.hPlanned)}</td><td class="num">${r.status==='prevu'?'—':fmtH(r.hDone)}</td>
+    <td class="num" style="white-space:nowrap"><button class="btn sm" onclick="openValidate('${r.id}')">${r.status==='prevu'?'Valider':'Modifier'}</button>
+      <button class="btn sm" title="Ajouter à Google Agenda" onclick="openGcal(S.ratt.filter(z=>z.group===('${r.group}')))">📅</button>
+      <button class="btn sm danger" title="Supprimer" onclick="delRatt('${r.id}')">✕</button></td></tr>`).join(''):'<tr><td class="empty">Aucun créneau pour ces filtres.</td></tr>';
+  // bilan
+  const bil=[...ys.values()].map(x=>{const d=duesOf(x.key,x);return {...x,due:d.v,manual:d.manual,pl:hoursPlanned(x.key),dn:hoursDone(x.key)}})
+    .filter(x=>(!cl||x.classe===cl)&&(!q||norm(x.name).includes(q))&&(x.due>0||x.pl>0||x.dn>0)).sort((a,b)=>(b.due-b.dn)-(a.due-a.dn));
+  $('bilanTable').innerHTML=bil.length?`<tr><th>Élève</th><th>Classe</th><th class="num">À récupérer</th><th class="num">Planifiées</th><th class="num">Récupérées</th><th class="num">Reste</th><th style="width:140px"></th></tr>`+bil.map(x=>{const rest=Math.max(0,x.due-x.dn);return `
+    <tr><td><a href="#" onclick="goStudent('${esc(x.key)}');return false">${esc(x.name)}</a></td><td>${esc(x.classe)}</td>
+    <td class="num">${fmtH(x.due)}${x.manual?' ✎':''}</td><td class="num">${fmtH(x.pl)}</td><td class="num" style="color:var(--green)">${fmtH(x.dn)}</td>
+    <td class="num" style="color:${rest>0?'var(--red)':'var(--green)'};font-weight:700">${fmtH(rest)}</td>
+    <td><div class="progress"><i style="width:${x.due?Math.min(100,x.dn/x.due*100):100}%"></i></div></td></tr>`}).join(''):'<tr><td class="empty">Aucune heure à récupérer.</td></tr>';
+}
+async function delRatt(id){
+  if(!confirm('Supprimer ce créneau de rattrapage ?')) return;
+  S.ratt=S.ratt.filter(r=>r.id!==id); await Store.deleteRatt(id); refreshAll();
+}
+/* ----- modale création ----- */
+let slotSel=new Set();
+function openSlotModal(pre=[]){
+  if(!S.students.size){toast('Importez d\'abord un fichier CSV');return}
+  slotSel=new Set(pre); $('slotSearch').value=''; $('slotDate').value=new Date().toISOString().slice(0,10);
+  $('slotLieu').value=S.settings.lieu||''; $('slotMotif').value=''; $('slotWho').value=S.user?.displayName||'';
+  updHours(); renderSlotStudents(); $('slotModal').classList.remove('hidden');
+  $('nSlack').parentElement.style.display=S.settings.slackWebhook?'':'none'; $('nSlack').checked=S.settings.slackOnCreate!==false;
+  $('nRemind').textContent=S.settings.slackWebhook&&S.settings.reminderOn?(Store.mode==='firestore'?`🔔 Rappel Slack automatique ${fmtMin(S.settings.reminderMin)} avant le début.`:'🔔 Rappel automatique indisponible en stockage local (nécessite Firestore + script).'):'';
+}
+function renderSlotStudents(){
+  const q=norm($('slotSearch').value); const ys=yearStats(); const excl=new Set((S.settings.exclClasses||[]).map(norm));
+  const list=[...S.students.values()].filter(s=>!excl.has(norm(s.classe))).map(s=>{const y=ys.get(s.key);const d=y?duesOf(s.key,y).v:0;return {...s,rest:Math.max(0,d-hoursDone(s.key)-hoursPlanned(s.key))}})
+    .filter(s=>slotSel.has(s.key)||!q||norm(s.name+s.classe).includes(q)).sort((a,b)=>(slotSel.has(b.key)-slotSel.has(a.key))||b.rest-a.rest||a.nom.localeCompare(b.nom));
+  $('slotStudents').innerHTML=list.map(s=>`<label><input type="checkbox" ${slotSel.has(s.key)?'checked':''} onchange="this.checked?slotSel.add('${esc(s.key)}'):slotSel.delete('${esc(s.key)}')"> ${esc(s.prenom)} <b>${esc(s.nom)}</b> <span class="note">${esc(s.classe)}</span><small>${s.rest>0?'reste '+fmtH(s.rest)+' à planifier':''}</small></label>`).join('');
+}
+function updHours(){ $('slotHours').value=hoursBetween($('slotStart').value,$('slotEnd').value); }
+async function saveSlot(){
+  if(!slotSel.size) return toast('Sélectionnez au moins un élève');
+  const date=$('slotDate').value, start=$('slotStart').value, end=$('slotEnd').value; if(!date||!start||!end) return toast('Date et horaires obligatoires');
+  const group=uid(); const base={date,start,end,hPlanned:+$('slotHours').value||0,hDone:null,status:'prevu',encadrant:$('slotWho').value.trim(),
+    lieu:$('slotLieu').value.trim(),motif:$('slotMotif').value.trim(),group,createdAt:new Date().toISOString(),createdBy:S.user?.email||''};
+  const created=[...slotSel].map(k=>{const s=S.students.get(k);return {...base,id:uid(),studentKey:k,studentName:s.name,classe:s.classe}});
+  S.ratt.push(...created); for(const r of created) await Store.saveRatt(r);
+  closeModal('slotModal'); refreshAll();
+  const msgs=['Créneau enregistré ('+created.length+' élève'+(created.length>1?'s':'')+')'];
+  if($('nSlack').checked && S.settings.slackWebhook){ await postSlack(slackSlotMsg(created)); msgs.push('message Slack envoyé'); }
+  if($('nGcal').checked) openGcal(created);
+  if($('nIcs').checked) downloadIcs(created);
+  toast(msgs.join(' · '));
+}
+/* ----- validation ----- */
+let valId=null;
+function openValidate(id){
+  const r=S.ratt.find(x=>x.id===id); valId=id;
+  $('valInfo').innerHTML=`<b>${esc(r.studentName)}</b> – ${fmtDL(r.date)} ${r.start}–${r.end} (${fmtH(r.hPlanned)} prévues)`;
+  $('valHours').value=r.hDone??r.hPlanned; $('valNote').value=r.note||''; $('valModal').classList.remove('hidden');
+}
+async function validate(absent){
+  const r=S.ratt.find(x=>x.id===valId); const h=absent?0:(+$('valHours').value||0);
+  r.hDone=h; r.note=$('valNote').value; r.status=absent||h===0?'absent':(h>=r.hPlanned?'realise':'partiel'); r.validatedAt=new Date().toISOString(); r.validatedBy=S.user?.email||'';
+  await Store.saveRatt(r); closeModal('valModal'); refreshAll();
+  if(S.settings.slackOnDone && S.settings.slackWebhook) postSlack({text:`${r.status==='absent'?'❌':'✅'} Rattrapage ${RSTAT[r.status][0].toLowerCase()} – ${r.studentName} (${r.classe}) le ${fmtD(r.date)} : ${fmtH(h)} récupérée(s) sur ${fmtH(r.hPlanned)} prévue(s).`});
+  toast('Rattrapage mis à jour');
+}
+
+/* =====================================================================
+   NOTIFICATIONS : Slack + Google Agenda / .ics
+   ===================================================================== */
+function slackSlotMsg(list){
+  const r=list[0]; const names=list.map(x=>`• ${x.studentName} (${x.classe})`).join('\n');
+  return {text:`Rattrapage planifié le ${fmtD(r.date)} ${r.start}-${r.end}`, blocks:[
+    {type:'header',text:{type:'plain_text',text:'🔧 Créneau de rattrapage planifié'}},
+    {type:'section',fields:[
+      {type:'mrkdwn',text:`*Quand*\n${fmtDL(r.date)}, ${r.start}–${r.end} (${fmtH(r.hPlanned)})`},
+      {type:'mrkdwn',text:`*Où*\n${r.lieu||'—'}`},
+      {type:'mrkdwn',text:`*Encadrant*\n${r.encadrant||'—'}`},
+      {type:'mrkdwn',text:`*Motif*\n${r.motif||'Rattrapage d\'heures'}`}]},
+    {type:'section',text:{type:'mrkdwn',text:`*Élève${list.length>1?'s':''} (${list.length})*\n${names}`}},
+    {type:'context',elements:[{type:'mrkdwn',text:`Ajouté dans Kronos${r.createdBy?' par '+r.createdBy:''}${S.settings.reminderOn&&Store.mode==='firestore'?` · rappel ${fmtMin(S.settings.reminderMin)} avant`:''}`}]}]};
+}
+async function postSlack(payload){
+  // Les webhooks Slack n'acceptent pas le CORS : envoi "no-cors" en x-www-form-urlencoded (réponse opaque).
+  try{ await fetch(S.settings.slackWebhook,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'payload='+encodeURIComponent(JSON.stringify(payload))}); }
+  catch(e){ toast('⚠️ Envoi Slack impossible : '+esc(e.message)); }
+}
+function eventText(list){
+  const r=list[0];
+  return {title:`Rattrapage – ${list.length>1?list.length+' élèves':list[0].studentName}`,
+    details:`${r.motif||'Rattrapage d\'heures'}\nEncadrant : ${r.encadrant||'—'}\nÉlèves :\n${list.map(x=>'- '+x.studentName+' ('+x.classe+')').join('\n')}\n\nCréé depuis Kronos`,
+    start:r.date.replace(/-/g,'')+'T'+r.start.replace(':','')+'00', end:r.date.replace(/-/g,'')+'T'+r.end.replace(':','')+'00', lieu:r.lieu};
+}
+function openGcal(list){
+  if(!list.length) return; const e=eventText(list);
+  const p=new URLSearchParams({action:'TEMPLATE',text:e.title,dates:`${e.start}/${e.end}`,ctz:'Europe/Paris',details:e.details,location:e.lieu||''});
+  if(S.settings.calId) p.set('src',S.settings.calId);
+  window.open('https://calendar.google.com/calendar/render?'+p.toString(),'_blank');
+  if(S.settings.calName) toast(`Dans Google Agenda, choisissez l'agenda « ${esc(S.settings.calName)} » avant d'enregistrer.`,6000);
+}
+function downloadIcs(list){
+  const e=eventText(list); const escI=s=>s.replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//EPAL//Kronos//FR','BEGIN:VEVENT',`UID:${list[0].group}@kronos.epal62.fr`,
+    `DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').slice(0,15)}Z`,`DTSTART;TZID=Europe/Paris:${e.start}`,`DTEND;TZID=Europe/Paris:${e.end}`,
+    `SUMMARY:${escI(e.title)}`,`DESCRIPTION:${escI(e.details)}`,`LOCATION:${escI(e.lieu||'')}`,'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'})); a.download=`rattrapage_${list[0].date}.ics`; a.click();
+}
+
+/* =====================================================================
+   PARAMÈTRES
+   ===================================================================== */
+function renderSettings(){
+  const st=S.settings;
+  $('hoursTable').innerHTML='<tr><th>Catégorie</th><th class="num">Heures / occurrence</th></tr>'+CAT_KEYS.map(k=>`<tr><td>${CATS[k].label}</td><td class="num"><input type="number" step="0.25" min="0" data-h="${k}" value="${st.hours[k]??0}" style="width:90px"></td></tr>`).join('')
+    +'<tr><td class="note" colspan="2">Stage / extérieur et Dispensé : jamais comptabilisés.</td></tr>';
+  $('pMinPct').value=st.minPct; $('pExclClasses').value=(st.exclClasses||[]).join(', ');
+  $('pSlack').value=st.slackWebhook||''; $('pSlackDone').checked=!!st.slackOnDone; $('pSlackCreate').checked=st.slackOnCreate!==false;
+  $('pRemind').checked=!!st.reminderOn; $('pRemindMin').value=st.reminderMin??75;
+  $('remindInfo').innerHTML=Store.mode==='firestore'?'Envoyé par le script Google Apps Script « Kronos – rappels » (vérification toutes les 5 min).':'⚠️ Fonctionne uniquement avec Firestore et le script Google Apps Script installé (voir README).';
+  $('pCalName').value=st.calName||''; $('pCalId').value=st.calId||''; $('pLieu').value=st.lieu||'';
+  $('pFirebase').value=LS.get('firebaseConfig',null)?JSON.stringify(LS.get('firebaseConfig')):'';
+  $('storeMode').innerHTML=Store.mode==='firestore'?`✅ Données partagées dans <b>Firestore</b> (projet ${esc(firebase.app().options.projectId)}), connecté en tant que ${esc(S.user?.email||'')}.`
+    :'💾 Données stockées <b>localement dans ce navigateur</b> (non partagées). Renseignez une configuration Firebase pour travailler en équipe.';
+  $('syncinfo').textContent=Store.mode==='firestore'?'☁︎ Firestore · '+(S.user?.email||''):'💾 Stockage local';
+}
+async function saveSettings(){
+  const st=S.settings;
+  document.querySelectorAll('[data-h]').forEach(i=>st.hours[i.dataset.h]=+i.value||0);
+  st.minPct=+$('pMinPct').value||0; st.exclClasses=$('pExclClasses').value.split(',').map(s=>s.trim()).filter(Boolean);
+  st.slackWebhook=$('pSlack').value.trim(); st.slackOnDone=$('pSlackDone').checked; st.slackOnCreate=$('pSlackCreate').checked;
+  st.reminderOn=$('pRemind').checked; st.reminderMin=Math.max(5,+$('pRemindMin').value||75);
+  st.calName=$('pCalName').value.trim(); st.calId=$('pCalId').value.trim(); st.lieu=$('pLieu').value.trim();
+  await Store.saveSettings(); refreshAll(); toast('Paramètres enregistrés');
+}
+
+/* =====================================================================
+   NAVIGATION & INIT
+   ===================================================================== */
+function showTab(t){
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  document.querySelectorAll('main>section').forEach(s=>s.classList.toggle('hidden',s.id!=='tab-'+t));
+  if(t==='eleve'&&!S.selStudent){const f=[...S.students.values()].find(s=>!(S.settings.exclClasses||[]).map(norm).includes(norm(s.classe)));if(f)S.selStudent=f.key}
+  refreshAll();
+}
+function refreshAll(){
+  yearStatsCache=null; fillSelects(); renderSettings();
+  const t=document.querySelector('#tabs button.active').dataset.tab;
+  if(t==='dash') renderDash(); if(t==='eleve'){renderStudList();renderStudent()} if(t==='ratt') renderRatt();
+}
+function bind(){
+  document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+  ['fClasse','fFrom','fTo'].forEach(id=>$(id).onchange=()=>{ if(id!=='fClasse') $('fMois').value=''; renderDash(); });
+  $('fMois').onchange=()=>{const m=$('fMois').value; if(m){const [y,mo]=m.split('-').map(Number); $('fFrom').value=m+'-01'; $('fTo').value=`${m}-${String(new Date(y,mo,0).getDate()).padStart(2,'0')}`}else{$('fFrom').value=$('fTo').value=''} renderDash();};
+  $('fReset').onclick=()=>{['fClasse','fMois','fFrom','fTo'].forEach(i=>$(i).value='');renderDash()};
+  $('studSearch').oninput=renderStudList; $('sFrom').onchange=$('sTo').onchange=renderStudent;
+  document.querySelectorAll('[data-per]').forEach(b=>b.onclick=()=>{const p=b.dataset.per,now=new Date(),iso=d=>d.toISOString().slice(0,10);
+    if(p==='all'){$('sFrom').value=$('sTo').value=''} else if(p==='month'){$('sFrom').value=iso(new Date(now.getFullYear(),now.getMonth(),1,12));$('sTo').value=iso(now)} else {$('sFrom').value=iso(new Date(now-30*864e5));$('sTo').value=iso(now)} renderStudent()});
+  ['rStatus','rClasse'].forEach(id=>$(id).onchange=renderRatt); $('rSearch').oninput=renderRatt;
+  $('fileInput').onchange=e=>e.target.files[0]&&handleCSV(e.target.files[0]);
+  const d=$('drop'); d.ondragover=e=>{e.preventDefault();d.classList.add('over')}; d.ondragleave=()=>d.classList.remove('over');
+  d.ondrop=e=>{e.preventDefault();d.classList.remove('over');e.dataTransfer.files[0]&&handleCSV(e.dataTransfer.files[0])};
+  $('slotSearch').oninput=renderSlotStudents; $('slotStart').onchange=$('slotEnd').onchange=updHours; $('slotSave').onclick=saveSlot;
+  $('valOk').onclick=()=>validate(false); $('valAbsent').onclick=()=>validate(true);
+  $('saveSettings').onclick=saveSettings;
+  $('testSlack').onclick=async()=>{ await saveSettings(); if(!S.settings.slackWebhook) return toast('Renseignez l\'URL du webhook'); await postSlack({text:'👋 Test Kronos : la connexion Slack fonctionne.'}); toast('Message test envoyé (vérifiez le canal Slack)'); };
+  $('saveFirebase').onclick=()=>{try{const t=$('pFirebase').value;const o=t.slice(t.indexOf('{'),t.lastIndexOf('}')+1);let c;try{c=JSON.parse(o)}catch(_){c=(new Function('return '+o))()}if(!c||!c.projectId)throw 0;LS.set('firebaseConfig',c);location.reload()}catch(e){toast('Configuration Firebase invalide')}};
+  $('clearFirebase').onclick=()=>{localStorage.removeItem('kronos_firebaseConfig');location.reload()};
+  $('exportJson').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),rows:S.rows,ratt:S.ratt,overrides:S.overrides,settings:S.settings})],{type:'application/json'}));a.download=`kronos_sauvegarde_${new Date().toISOString().slice(0,10)}.json`;a.click()};
+  $('importJson').onchange=async e=>{const f=e.target.files[0];if(!f)return;const j=JSON.parse(await f.text());if(!confirm('Restaurer cette sauvegarde ? Les données actuelles seront fusionnées/remplacées.'))return;
+    ingestRows(j.rows||[]); await Store.saveRows(new Set((j.rows||[]).map(r=>r.k)));
+    for(const r of j.ratt||[]){const i=S.ratt.findIndex(x=>x.id===r.id);if(i>=0)S.ratt[i]=r;else S.ratt.push(r);await Store.saveRatt(r)}
+    Object.assign(S.overrides,j.overrides||{});await Store.saveOverrides(); if(j.settings){S.settings={...S.settings,...j.settings};await Store.saveSettings()} refreshAll();toast('Sauvegarde restaurée')};
+  $('wipe').onclick=async()=>{if(!confirm('Effacer tous les appels importés ? (les rattrapages sont conservés)'))return;S.rows=[];S.students.clear();await Store.clearRows();refreshAll()};
+  document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m&&m.id!=='login')m.classList.add('hidden')}));
+}
+bind();
+Store.init().then(()=>{ refreshAll(); if(!S.rows.length) showTab('import'); });
+</script>
+</body>
+</html>
